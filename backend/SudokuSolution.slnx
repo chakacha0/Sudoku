@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="Sudoku.API/Sudoku.API.csproj" />
+  <Project Path="Sudoku.Core/Sudoku.Core.csproj" />
+  <Project Path="Sudoku.Infrastructure/Sudoku.Infrastructure.csproj" />
+</Solution>

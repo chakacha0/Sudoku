@@ -1,0 +1,13 @@
+@font-face {
+  font-family: "Main"; /* Придумай любое имя */
+  src: url("../assets/Font6.ttf") format("truetype"); /* Укажи путь и расширение */
+  font-weight: 100;
+  font-style: regular;
+}
+
+@font-face {
+  font-family: "Font2"; /* Придумай любое имя */
+  src: url("../assets/Font4.ttf") format("truetype"); /* Укажи путь и расширение */
+  font-weight: 0;
+  font-style: normal;
+}

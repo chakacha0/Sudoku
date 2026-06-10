@@ -1,0 +1,22 @@
+# Этап сборки
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /app
+
+# Копируем файл проекта и восстанавливаем зависимости
+COPY ["SudokuApi.csproj", "./"]
+RUN dotnet restore
+
+# Копируем всё остальное и собираем
+COPY . .
+RUN dotnet publish "SudokuApi.csproj" -c Release -o /out
+
+# Этап запуска
+FROM mcr.microsoft.com/dotnet/aspnet:10.0
+WORKDIR /app
+COPY --from=build /out .
+
+# Указываем порт, который будет слушать приложение
+ENV ASPNETCORE_URLS=http://+:80
+EXPOSE 80
+
+ENTRYPOINT ["dotnet", "SudokuApi.dll"]

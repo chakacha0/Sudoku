@@ -1,0 +1,140 @@
+@import "./Styles/Variables.css";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Arial, sans-serif;
+}
+
+.sudoku-grid {
+  display: inline-block;
+  border: 3px solid #000;
+}
+
+.sudoku-row {
+  display: flex;
+}
+
+/* Каждая ячейка */
+.sudoku-cell {
+  width: 50px;
+  height: 50px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  font-family: "Font2";
+}
+
+.sudoku-cell:nth-child(3n):not(:last-child) {
+  border-right: 3px solid #000;
+}
+
+.sudoku-row:nth-child(3n):not(:last-child) .sudoku-cell {
+  border-bottom: 3px solid #000;
+}
+.sudoku-cell.readonly {
+  background-color: #f0f0f0; /* Серый фон для начальных цифр */
+  color: #333;
+  cursor: default;
+}
+
+.sudoku-cell.editable {
+  background-color: #fff;
+  color: #007bff; /* Синий цвет для цифр игрока */
+  outline: none;
+}
+
+.sudoku-cell.editable:focus {
+  background-color: #e7f3ff;
+}
+
+input {
+  border: 1px solid #ccc;
+  text-align: center;
+  font-family: inherit;
+  caret-color: transparent;
+}
+
+/* Используем два класса сразу, чтобы поднять приоритет, и !important */
+.sudoku-cell.error {
+  color: #ff4d4d !important;
+  background-color: #ff4d4d2d;
+}
+
+/* На всякий случай отключим синее выделение при фокусе на ошибочной клетке */
+.sudoku-cell.error:focus {
+  background-color: #ff4d4d58 !important;
+  outline: none;
+}
+
+.name {
+  font-family: "Main", sans-serif;
+  color: #218838;
+  font-size: 70px;
+  font-weight: 100;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+/* Общая область: Доска слева, Панель справа */
+.main-game-area {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start; /* Выравнивание по верху доски */
+  gap: 30px; /* Расстояние между доской и панелью */
+  margin-top: 20px;
+}
+
+/* Правая колонка */
+.side-panel {
+  display: flex;
+  flex-direction: column; /* Элементы один под другим */
+  gap: 20px; /* Расстояние между матрицей чисел и кнопкой */
+}
+
+/* Стили кнопки "Новая игра" */
+.new-game-btn {
+  /* Чтобы кнопка была такой же ширины, как NumberSelector */
+  width: 100%;
+  /* Расчет ширины: (3 кнопки по 55px) + (2 отступа по 12px) + (padding панели 30px) */
+  max-width: 219px;
+
+  height: 55px; /* Сделаем высоту как у кнопок цифр для симметрии */
+  font-family: "Font2", sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.2);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.new-game-btn:hover {
+  background-color: #218838;
+  transform: translateY(-3px); /* Эффект прыжка как у цифр */
+  box-shadow: 0 6px 20px rgba(40, 167, 69, 0.3);
+}
+
+.new-game-btn:active {
+  transform: scale(0.98); /* Эффект нажатия */
+}
+
+/* На случай, если экран узкий — переносим панель под доску */
+@media (max-width: 850px) {
+  .main-game-area {
+    flex-direction: column;
+    align-items: center;
+  }
+}
