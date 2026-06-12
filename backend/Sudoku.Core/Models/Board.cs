@@ -2,16 +2,26 @@ namespace Sudoku.Core.Models;
 
 public class Board
 {
-    public int[][] Cells { get; set; }
-
-    public List<MoveHistory> History { get; set; } = new List<MoveHistory>();
+    public int[][] Solution { get; set; }   
+    public int[][] Task { get; set; }     
 
     public Board()
     {
-        Cells = new int[9][];
+        Solution = new int[9][];
+        Task = new int[9][];
         for (int i = 0; i < 9; i++)
         {
-            Cells[i] = new int[9];
+            Task[i] = new int[9];
+            Solution[i]= new int[9];
         }
     }
+
+    public void CopySolutionToCells()
+{
+    for (int i = 0; i < 9; i++)
+    {
+        // Копирует содержимое Solution[i] в Cells[i]
+        Array.Copy(Solution[i], Task[i], 9);
+    }
+}
 }

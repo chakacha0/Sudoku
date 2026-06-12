@@ -6,6 +6,19 @@ namespace Sudoku.Core.Services;
 public class SudokuSolver : ISudokuSolver
 { // Поле для хранения валидатора
     private int _solutionsCount;
+    private int[][]? _firstSolution;
+
+     public int[][] GetSolution(int[][] board)
+    {
+        _solutionsCount = 0;
+        _firstSolution = null;
+
+        int[][] cellsCopy = DeepClone(board);
+        // Запускаем поиск с лимитом 1, так как нам нужно только первое решение
+        SolveRecursive(cellsCopy, 1);
+
+        return _firstSolution ?? board; // Если решение не найдено, вернет исходную доску
+    }
     
 
     public int CountSolutions(int[][] board, int limit = 2)
@@ -44,6 +57,13 @@ public class SudokuSolver : ISudokuSolver
         }
 
         _solutionsCount++;
+
+        if (_firstSolution == null)
+        {
+            _firstSolution = DeepClone(cells);
+        }
+        
+        if (_solutionsCount >= limit) return true;
         return false;
     }
 

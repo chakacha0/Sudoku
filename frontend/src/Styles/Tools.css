@@ -1,0 +1,68 @@
+@import "./Variables.css";
+
+.side-panel .tools-row {
+  flex-shrink: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  width: 100%;
+}
+
+.side-panel .tools-row .btn {
+  width: 100%;
+  height: 50px;
+  padding: 0;
+  border: 2px solid var(--color-main);
+  background-color: var(--bg-white);
+  color: var(--color-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 0;
+  box-shadow: 4px 4px 0 rgba(57, 168, 68, 0.15);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.side-panel .tools-row .btn img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.side-panel .tools-row .btn:first-child {
+  border-color: var(--color-accent);
+  box-shadow: 4px 4px 0 rgba(68, 146, 216, 0.15);
+}
+
+.side-panel .tools-row .btn:hover:not(:disabled) {
+  transform: translateY(-3px);
+  background-color: #f4fff3;
+}
+
+.side-panel .tools-row .btn:first-child:hover:not(:disabled) {
+  background-color: #f0f8ff;
+}
+
+.side-panel .tools-row .btn.active {
+  background-color: var(--color-main);
+  border-color: var(--color-dark);
+  box-shadow: 4px 4px 0 rgba(57, 168, 68, 0.25);
+}
+
+.side-panel .tools-row .btn.active img {
+  filter: brightness(0) invert(1);
+}
+
+.side-panel .tools-row .btn:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 0 0 transparent;
+}
+
+.side-panel .tools-row .btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+  border-color: #d1d8d1;
+  box-shadow: none;
+  filter: grayscale(1);
+}

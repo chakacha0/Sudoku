@@ -1,0 +1,71 @@
+.game-stats {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.game-stats-timer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.game-stats-timer {
+  font-family: "Main", Arial, sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-dark);
+  letter-spacing: 1px;
+  font-variant-numeric: tabular-nums;
+}
+
+.game-stats-pause-btn {
+  width: 44px;
+  height: 44px;
+  border: 2px solid var(--color-main);
+  border-radius: 0;
+  background-color: var(--bg-white);
+  color: var(--color-main);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 4px 4px 0 rgba(57, 168, 68, 0.15);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.game-stats-pause-btn:hover {
+  background-color: #f4fff3;
+  transform: translateY(-2px);
+}
+
+.game-stats-pause-btn.paused {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  box-shadow: 4px 4px 0 rgba(68, 146, 216, 0.15);
+}
+
+.game-stats-pause-btn.paused:hover {
+  background-color: #f0f8ff;
+}
+
+.game-stats-mistakes {
+  font-family: "Main", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #2d5a31;
+  text-align: center;
+  padding: 6px 10px;
+  border: 2px solid #e0e8e0;
+  background-color: #fafcfa;
+}
+
+.game-stats-mistakes.limit-reached {
+  color: #c0392b;
+  border-color: #f5b7b1;
+  background-color: #fff5f5;
+}

@@ -11,11 +11,13 @@ public class SudokuController : ControllerBase
 {
     private readonly ISudokuGenerator _generator;
     private readonly ISudokuValidator _validator;
+    private readonly ISudokuSolver _solver;
 
-    public SudokuController(ISudokuGenerator generator, ISudokuValidator validator)
+    public SudokuController(ISudokuGenerator generator, ISudokuValidator validator, ISudokuSolver solver)
     {
         _generator = generator;
         _validator = validator;
+        _solver=solver;
     }
 
     [HttpGet("new")]
@@ -34,6 +36,15 @@ public class SudokuController : ControllerBase
         // Вместо просто Ok(isValid) лучше вернуть объект, 
         // чтобы в JS это выглядело как response.data.isValid
         return Ok(new { isValid });
+    }
+
+    [HttpPost("get-solution")]
+    public ActionResult<int[][]> Solve([FromBody] SudokuRequest request)
+    {
+        // request.Board - это int[][] пришедший с фронта
+        var solution = _solver.GetSolution(request.Board);
+        
+        return Ok(solution);
     }
 }
 

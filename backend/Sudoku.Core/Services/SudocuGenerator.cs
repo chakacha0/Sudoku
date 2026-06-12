@@ -20,11 +20,13 @@ public class SudokuGenerator : ISudokuGenerator
     {
         var board = new Board();       
         
-        FillBoard(board.Cells);
+        FillBoard(board.Solution);
+
+        board.CopySolutionToCells();
 
         int targetEmptyCells = GetTargetEmptyCells(difficulty);
         
-        RemoveDigits(board, targetEmptyCells);
+        RemoveDigits(board.Task, targetEmptyCells);
 
         return board;
     }
@@ -54,7 +56,7 @@ public class SudokuGenerator : ISudokuGenerator
         return true;
     }
 
-    private void RemoveDigits(Board board, int targetEmptyCells)
+    private void RemoveDigits(int[][] board, int targetEmptyCells)
     {
         // Создаем список всех 81 координат (0,0), (0,1)...(8,8)
         var positions = new List<(int row, int col)>();
@@ -75,14 +77,14 @@ public class SudokuGenerator : ISudokuGenerator
              break;
             }
 
-            int backupValue = board.Cells[pos.row][pos.col];
+            int backupValue = board[pos.row][pos.col];
             
             // Пытаемся удалить число
-            board.Cells[pos.row][pos.col] = 0;
+            board[pos.row][pos.col] = 0;
 
             // Проверяем количество решений. Нам достаточно знать, что их больше 1.
             // Поэтому ставим limit: 2
-            if (_solver.CountSolutions(board.Cells, limit: 2) == 1)
+            if (_solver.CountSolutions(board, limit: 2) == 1)
             {
                 // Если решение всё еще одно — оставляем клетку пустой
                 removedCount++;
@@ -90,9 +92,13 @@ public class SudokuGenerator : ISudokuGenerator
             else
             {
                 // Если появилось больше одного решения — возвращаем число назад
-                board.Cells[pos.row][pos.col] = backupValue;
-            }
+                board[pos.row][pos.col] = backupValue;
+            }            
         }
+        if (removedCount < targetEmptyCells)
+                {
+                    Console.WriteLine($"[Warning] Не удалось достичь цели. Удалено {removedCount} вместо {targetEmptyCells}");
+                }
     }
 
     private int GetTargetEmptyCells(int level)
@@ -105,7 +111,7 @@ public class SudokuGenerator : ISudokuGenerator
         3 => _random.Next(41, 51), // Средне: 41-50
         4 => _random.Next(51, 56), // Сложно: 51-55
         5 => _random.Next(56, 61), // Эксперт: 56-60
-        6 => _random.Next(61, 66), // Мастер: 61-65
+        6 => _random.Next(61, 64), // Мастер: 61-65
         _ => 30 // По умолчанию
     };
     }

@@ -4,17 +4,17 @@ import "../Styles/Difficult.css";
 const DifficultySelector = ({ currentDifficulty, setDifficulty }) => {
   // Определяем пресеты сложности: название и количество пустых клеток
   const levels = [
-    { label: "Начинающий", value: 1 },
-    { label: "Легкий", value: 2 },
-    { label: "Средний", value: 3 },
-    { label: "Сложный", value: 4 },
-    { label: "Эксперт", value: 5 },
-    { label: "Экстремальный", value: 6 },
+    { label: "Easy", value: 2 },
+    { label: "Medium", value: 3 },
+    { label: "Hard", value: 4 },
+    { label: "Expert", value: 5 },
+    { label: "Extream", value: 6 },
   ];
 
   return (
     <div className="difficulty-container">
       <div className="difficulty-buttons">
+        <h1 className ="level">Level:</h1>
         {levels.map((level) => (
           <button
             key={level.value}

@@ -11,3 +11,19 @@
   font-weight: 0;
   font-style: normal;
 }
+
+:root {
+  --color-1: #116225e0;
+  --color-222: #28a745;
+  --color-333: #28a74647;
+
+  --color-main: #39a844;
+  --color-dark: #116225;
+  --color-accent: #4492d8;
+  --color-soft-bg: #dcf0d7;
+  --bg-white: #ffffff;
+  --panel-shadow: 8px 8px 0 rgba(57, 168, 68, 0.15);
+  --panel-border: 3px solid var(--color-main);
+  --cell-size: 50px;
+  --board-height: calc(var(--cell-size) * 9 + 6px);
+}

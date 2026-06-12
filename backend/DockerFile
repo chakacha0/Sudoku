@@ -1,22 +1,35 @@
 # Этап сборки
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
-WORKDIR /app
+WORKDIR /src
 
-# Копируем файл проекта и восстанавливаем зависимости
-COPY ["SudokuApi.csproj", "./"]
-RUN dotnet restore
+# 1. Копируем файлы всех проектов, чтобы восстановить зависимости
+# (Важно сохранить структуру папок!)
+COPY ["Sudoku.API/Sudoku.API.csproj", "Sudoku.API/"]
+COPY ["Sudoku.Core/Sudoku.Core.csproj", "Sudoku.Core/"]
+COPY ["Sudoku.Infrastructure/Sudoku.Infrastructure.csproj", "Sudoku.Infrastructure/"]
 
-# Копируем всё остальное и собираем
+# Если у тебя в корне backend лежит файл SudokuApi.csproj (или .sln)
+# COPY ["SudokuApi.csproj", "./"] 
+
+# Восстанавливаем зависимости именно для главного проекта (API)
+RUN dotnet restore "Sudoku.API/Sudoku.API.csproj"
+
+# 2. Копируем вообще все исходники
 COPY . .
-RUN dotnet publish "SudokuApi.csproj" -c Release -o /out
+
+# 3. Публикуем именно проект API
+WORKDIR "/src/Sudoku.API"
+RUN dotnet publish "Sudoku.API.csproj" -c Release -o /app/out
 
 # Этап запуска
 FROM mcr.microsoft.com/dotnet/aspnet:10.0
 WORKDIR /app
-COPY --from=build /out .
+# Копируем результат сборки из папки /app/out
+COPY --from=build /app/out .
 
-# Указываем порт, который будет слушать приложение
 ENV ASPNETCORE_URLS=http://+:80
 EXPOSE 80
 
-ENTRYPOINT ["dotnet", "SudokuApi.dll"]
+# ВАЖНО: Укажи здесь правильное имя выходной DLL. 
+# Скорее всего это Sudoku.API.dll
+ENTRYPOINT ["dotnet", "Sudoku.API.dll"]

@@ -1,3 +1,4 @@
+@import "./Variables.css";
 .difficulty-container {
   margin: 5px 0;
   width: 100%;
@@ -15,13 +16,19 @@
   border-radius: 50px; /* Скругленная панель */
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
 }
+.level {
+  font-family: "Main", sans-serif; /* Твой шрифт */
+  font-size: 16px;
+  font-weight: 600;
+  margin-left: 10px;
+}
 
 .diff-btn {
   padding: 10px 20px;
   border: 2px solid transparent;
   background-color: transparent;
   color: #555;
-  font-family: "Font2", sans-serif; /* Твой шрифт */
+  font-family: "Main", sans-serif; /* Твой шрифт */
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;

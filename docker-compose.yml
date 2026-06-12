@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  # База данных Postgres
+  db:
+    image: postgres:latest
+    container_name: sudoku_db
+    restart: always
+    environment:
+      POSTGRES_DB: sudoku_db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: postgre
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/
+
+  # Бэкенд на ASP.NET
+  backend:
+    build: ./backend
+    container_name: sudoku_backend
+    depends_on:
+      - db
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=db;Database=sudoku_db;Username=admin;Password=postgre
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "5000:80"
+
+  # Фронтенд на React (Vite)
+  frontend:
+    build: ./frontend
+    container_name: sudoku_frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:

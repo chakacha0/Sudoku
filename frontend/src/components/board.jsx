@@ -1,6 +1,18 @@
-import Cell from "./Cell";
+import Cell from "./cell";
+import "../Styles/Board.css";
 
-const Board = ({ board, initialBoard, onCellChange, onCellClick, errors }) => {
+const Board = ({
+  board,
+  initialBoard,
+  notes,
+  isNotesMode,
+  selectedCell,
+  onCellChange,
+  onCellClick,
+  onNoteToggle,
+  onNoteClear,
+  errors,
+}) => {
   return (
     <div className="sudoku-grid">
       {board.map((row, rowIndex) => (
@@ -9,12 +21,20 @@ const Board = ({ board, initialBoard, onCellChange, onCellClick, errors }) => {
             <Cell
               key={`${rowIndex}-${colIndex}`}
               value={cellValue}
+              notes={notes[rowIndex][colIndex]}
               isReadOnly={initialBoard[rowIndex][colIndex] !== 0}
               isError={errors && errors.includes(`${rowIndex}-${colIndex}`)}
+              isSelected={
+                selectedCell?.row === rowIndex &&
+                selectedCell?.col === colIndex
+              }
+              isNotesMode={isNotesMode}
               onChange={(newValue) =>
                 onCellChange(rowIndex, colIndex, newValue)
               }
-              onClick={() => onCellClick(rowIndex, colIndex)} // <--- Добавляем проброс клика
+              onClick={() => onCellClick(rowIndex, colIndex)}
+              onNoteToggle={(value) => onNoteToggle(rowIndex, colIndex, value)}
+              onNoteClear={() => onNoteClear(rowIndex, colIndex)}
             />
           ))}
         </div>

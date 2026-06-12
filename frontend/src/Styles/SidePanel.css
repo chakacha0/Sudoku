@@ -1,0 +1,68 @@
+@import "./Variables.css";
+
+.side-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 310px;
+  height: var(--board-height);
+  padding: 14px;
+  background-color: var(--bg-white);
+  border: var(--panel-border);
+  box-shadow: var(--panel-shadow);
+  border-radius: 0;
+  box-sizing: border-box;
+  font-family: "Main", Arial, sans-serif;
+}
+
+.side-panel__divider {
+  flex-shrink: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(57, 168, 68, 0.35) 20%,
+    rgba(57, 168, 68, 0.35) 80%,
+    transparent
+  );
+}
+
+.side-panel__numbers {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+}
+
+.new-game-btn {
+  flex-shrink: 0;
+  width: 100%;
+  height: 50px;
+  padding: 0 16px;
+  border: 2px solid var(--color-dark);
+  border-radius: 0;
+  background-color: var(--color-main);
+  color: var(--bg-white);
+  font-family: "Main", Arial, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  box-shadow: 4px 4px 0 rgba(17, 98, 37, 0.25);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.new-game-btn:hover {
+  background-color: #45b84f;
+  transform: translateY(-3px);
+  box-shadow: 6px 6px 0 rgba(17, 98, 37, 0.25);
+}
+
+.new-game-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 0 0 transparent;
+}
