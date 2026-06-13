@@ -1,20 +1,14 @@
-using System.Data;
-using Microsoft.Extensions.Configuration;
-using Npgsql;
+using Microsoft.EntityFrameworkCore;
 
-public class SudokuDbContext : ISudokuDbContext
+namespace Sudoku.Infrastructure.Persistence;
+
+// Наследуемся от DbContext — это "сердце" Entity Framework
+public class SudokuDbContext : DbContext
 {
-    private readonly IConfiguration _configuration;
-    private readonly string _connectionString;
-
-    public SudokuDbContext(IConfiguration configuration)
+    public SudokuDbContext(DbContextOptions<SudokuDbContext> options)
+        : base(options)
     {
-        _configuration = configuration;
-        // Берем строку из секции ConnectionStrings:DefaultConnection
-        _connectionString = _configuration.GetConnectionString("DefaultConnection") 
-                            ?? throw new ArgumentNullException("Connection string not found");
     }
 
-    public IDbConnection CreateConnection() 
-        => new NpgsqlConnection(_connectionString);
+    // Пока здесь пусто, таблиц нет, но для проверки подключения этого достаточно
 }
