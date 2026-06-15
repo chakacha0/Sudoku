@@ -3,14 +3,11 @@ export const calculateRemainingNumbers = (board, errors = []) => {
 
   if (!board || board.length === 0) return counts;
 
-  // Проходим по всем строкам и колонкам
   board.forEach((row, rowIndex) => {
     row.forEach((num, colIndex) => {
       if (num !== 0) {
-        // Создаем ID ячейки, как в твоем массиве ошибок (например "0-5")
         const cellId = `${rowIndex}-${colIndex}`;
         
-        // Считаем число ТОЛЬКО если его нет в списке ошибок
         if (!errors.includes(cellId)) {
           counts[num] = (counts[num] || 0) + 1;
         }

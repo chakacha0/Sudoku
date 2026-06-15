@@ -4,7 +4,7 @@ using Sudoku.Core.Models;
 namespace Sudoku.Core.Services;
 
 public class SudokuSolver : ISudokuSolver
-{ // Поле для хранения валидатора
+{ 
     private int _solutionsCount;
     private int[][]? _firstSolution;
 
@@ -14,10 +14,9 @@ public class SudokuSolver : ISudokuSolver
         _firstSolution = null;
 
         int[][] cellsCopy = DeepClone(board);
-        // Запускаем поиск с лимитом 1, так как нам нужно только первое решение
         SolveRecursive(cellsCopy, 1);
 
-        return _firstSolution ?? board; // Если решение не найдено, вернет исходную доску
+        return _firstSolution ?? board; 
     }
     
 
@@ -43,7 +42,6 @@ public class SudokuSolver : ISudokuSolver
                 {
                     for (int num = 1; num <= 9; num++)
                     {
-                        // ИСПОЛЬЗУЕМ ТВОЙ СЕРВИС ВМЕСТО ПЕРЕПИСЫВАНИЯ КОДА
                         if (IsSafe(cells, row, col, num))
                         {
                             cells[row][col] = num;
@@ -71,22 +69,18 @@ public class SudokuSolver : ISudokuSolver
     {
         if (value < 1 || value > 9) return false;
 
-        // 1. Проверяем строку (row)
         for (int i = 0; i < 9; i++)
         {
-            // Пропускаем ту же самую клетку, которую проверяем (i != col)
             if (i != col && grid[row][i] == value) 
                 return false;
         }
 
-        // 2. Проверяем столбец (col)
         for (int i = 0; i < 9; i++)
         {
             if (i != row && grid[i][col] == value) 
                 return false;
         }
 
-        // 3. Проверяем малый квадрат 3x3
         int startRow = (row / 3) * 3;
         int startCol = (col / 3) * 3;
 
@@ -101,7 +95,7 @@ public class SudokuSolver : ISudokuSolver
 
          
 
-        return true; // Если ни одно правило не нарушено
+        return true; 
     }
 
     private int[][] DeepClone(int[][] source)

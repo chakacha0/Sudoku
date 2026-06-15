@@ -2,7 +2,7 @@ import React from "react";
 import "../Styles/Difficult.css";
 
 const DifficultySelector = ({ currentDifficulty, setDifficulty }) => {
-  // Определяем пресеты сложности: название и количество пустых клеток
+  
   const levels = [
     { label: "Easy", value: 2 },
     { label: "Medium", value: 3 },

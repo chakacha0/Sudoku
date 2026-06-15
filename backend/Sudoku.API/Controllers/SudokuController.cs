@@ -32,16 +32,14 @@ public class SudokuController : ControllerBase
     public ActionResult<bool> CheckMove([FromBody] MoveRequestDto request)
     {
         var isValid = _validator.IsMoveValid(request.Grid, request.Row, request.Col, request.Value);
-        
-        // Вместо просто Ok(isValid) лучше вернуть объект, 
-        // чтобы в JS это выглядело как response.data.isValid
+       
         return Ok(new { isValid });
     }
 
     [HttpPost("get-solution")]
     public ActionResult<int[][]> Solve([FromBody] SudokuRequest request)
     {
-        // request.Board - это int[][] пришедший с фронта
+      
         var solution = _solver.GetSolution(request.Board);
         
         return Ok(solution);

@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using Sudoku.Core.Models;
 
 namespace Sudoku.Infrastructure.Persistence;
 
-// Наследуемся от DbContext — это "сердце" Entity Framework
+// 
 public class SudokuDbContext : DbContext
 {
     public SudokuDbContext(DbContextOptions<SudokuDbContext> options)
@@ -10,5 +11,18 @@ public class SudokuDbContext : DbContext
     {
     }
 
-    // Пока здесь пусто, таблиц нет, но для проверки подключения этого достаточно
+    public DbSet<User> Users { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => e.Email).IsUnique(); 
+            entity.Property(e => e.Username).IsRequired().HasMaxLength(50);
+        });
+    }
 }

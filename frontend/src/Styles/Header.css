@@ -1,15 +1,23 @@
 @import "./Variables.css";
 
 .main-header {
+  position: relative;
   display: flex;
   width: 100%;
-  background-color: #14a13231; /* Темно-синий фон */
+  background-color: #14a13231;
   padding: 15px 0;
   margin-bottom: 30px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  display: flex;
   justify-content: center;
+  align-items: center;
   font-family: "Main";
+  box-sizing: border-box;
+}
+
+.header-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .header-content {
@@ -24,11 +32,7 @@
   letter-spacing: 4px;
   text-transform: uppercase;
   font-weight: bolder;
-
-  /* Основной цвет букв */
   color: var(--color-333) !important;
-
-  /* Имитация контура через тень (обводит букву со всех сторон) */
   text-shadow:
     -1px -1px 0 var(--color-222),
     1px -1px 0 var(--color-222),
@@ -37,10 +41,9 @@
 }
 
 .header-badge {
-  display: inline-flex; /* Чтобы badge был по размеру текста, но стал флекс-контейнером */
-  align-items: center; /* Центрирование по вертикали */
-  justify-content: center; /* Центрирование по горизонтали */
-
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background-color: #3498db;
   color: white;
   padding: 6px 10px 3px 10px;
@@ -48,12 +51,68 @@
   font-size: 0.8rem;
   margin-top: 5px;
   text-transform: uppercase;
-
-  /* Добавь это, если текст все равно кажется смещенным вверх/вниз */
   line-height: 1;
 }
 
 .frog {
-  size: 3rem;
-  margin: 0px 50px;
+  size: 10vh;
+  margin: 0 50px;
+  flex-shrink: 0;
+}
+
+.header-user-area {
+  position: absolute;
+  right: 36px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.header-user-btn {
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  line-height: 1;
+  transition: opacity 0.2s ease;
+}
+
+.header-user-btn img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.header-username {
+  font-family: "Main", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-dark);
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.header-user-btn:hover {
+  opacity: 0.75;
+}
+
+@media (max-width: 600px) {
+  .header-user-area {
+    right: 20px;
+  }
+
+  .header-username {
+    max-width: 80px;
+    font-size: 14px;
+  }
+
+  .frog {
+    margin: 0 20px;
+  }
 }

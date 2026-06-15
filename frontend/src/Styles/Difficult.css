@@ -8,16 +8,16 @@
 
 .difficulty-buttons {
   display: flex;
-  flex-wrap: wrap; /* Чтобы кнопки переносились на мобилках */
+  flex-wrap: wrap; 
   gap: 12px;
   justify-content: center;
   padding: 10px;
-  background-color: #f8f9fa; /* Светлый фон подложки */
-  border-radius: 50px; /* Скругленная панель */
+  background-color: #f8f9fa; 
+  border-radius: 50px; 
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 .level {
-  font-family: "Main", sans-serif; /* Твой шрифт */
+  font-family: "Main", sans-serif; 
   font-size: 16px;
   font-weight: 600;
   margin-left: 10px;
@@ -28,7 +28,7 @@
   border: 2px solid transparent;
   background-color: transparent;
   color: #555;
-  font-family: "Main", sans-serif; /* Твой шрифт */
+  font-family: "Main", sans-serif; 
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
@@ -37,41 +37,37 @@
   outline: none;
 }
 
-/* Эффект при наведении */
 .diff-btn:hover {
   color: #2c3e50;
   background-color: #e9ecef;
 }
 
-/* Стиль активной (нажатой) кнопки */
 .diff-btn.active {
-  background-color: #3498db; /* Голубой как в хедере */
+  background-color: #3498db; 
   color: white;
   box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
   transform: translateY(-1px);
 }
 
-/* Разные цвета для уровней при активации (по желанию) */
-/* Если хочешь, чтобы Эксперт был красным, а Начинающий зеленым */
 
 .diff-btn.active[key="1"],
 .diff-btn.active:nth-child(1) {
   background-color: #2ecc71;
   box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
-} /* Зеленый */
+} 
 .diff-btn.active:nth-child(2) {
   background-color: #27ae60;
 }
 .diff-btn.active:nth-child(3) {
   background-color: #f1c40f;
   color: #333;
-} /* Желтый */
+} 
 .diff-btn.active:nth-child(4) {
   background-color: #e67e22;
-} /* Оранжевый */
+} 
 .diff-btn.active:nth-child(5) {
   background-color: #e74c3c;
-} /* Красный */
+} 
 .diff-btn.active:nth-child(6) {
   background-color: #c0392b;
-} /* Темно-красный */
+} 

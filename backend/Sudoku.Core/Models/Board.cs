@@ -20,7 +20,7 @@ public class Board
 {
     for (int i = 0; i < 9; i++)
     {
-        // Копирует содержимое Solution[i] в Cells[i]
+        
         Array.Copy(Solution[i], Task[i], 9);
     }
 }

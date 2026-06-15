@@ -54,14 +54,14 @@
   border-bottom: 3px solid var(--color-1);
 }
 .sudoku-cell.readonly {
-  background-color: #f0f0f0; /* Серый фон для начальных цифр */
+  background-color: #f0f0f0; 
   color: #333;
   cursor: default;
 }
 
 .sudoku-cell.editable {
   background-color: #fff;
-  color: #007bff; /* Синий цвет для цифр игрока */
+  color: #007bff; 
   outline: none;
 }
 
@@ -101,13 +101,13 @@
   line-height: 1;
 }
 
-/* Используем два класса сразу, чтобы поднять приоритет, и !important */
+
 .sudoku-cell.error {
   color: #ff4d4d !important;
   background-color: #ff4d4d2d;
 }
 
-/* На всякий случай отключим синее выделение при фокусе на ошибочной клетке */
+
 .sudoku-cell.error:focus {
   background-color: #ff4d4d58 !important;
   outline: none;

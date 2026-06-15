@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { getNewGame, validateMove, getSolution } from "./api/sudokuApi";
 import Board from "./components/board";
 import NumberSelectore from "./components/numberSelector";
 import DifficultySelector from "./components/difficultySelector";
 import Header from "./components/header";
+import Modal from "./components/Modal";
+import AuthForm from "./components/AuthForm";
 import ResultModal from "./components/resultModal";
 import GameStats from "./components/gameStats";
 import { calculateRemainingNumbers } from "./utils/sudokuHelper";
@@ -33,10 +35,27 @@ function App() {
   const [isGameLost, setIsGameLost] = useState(false);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [isTimerPaused, setIsTimerPaused] = useState(false);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [username, setUsername] = useState(
+    () => localStorage.getItem("username") || "",
+  );
 
   const isGameOver = isGameWon || isGameLost;
 
-  // Функция для создания новой игры
+  const elapsedRef = useRef(elapsedSeconds);
+  const loadingRef = useRef(loading);
+  const boardLoadedRef = useRef(false);
+
+  useEffect(() => {
+    elapsedRef.current = elapsedSeconds;
+  }, [elapsedSeconds]);
+
+  useEffect(() => {
+    loadingRef.current = loading;
+    boardLoadedRef.current = board.length > 0;
+  }, [loading, board.length]);
+
+  
   const startNewGame = async () => {
     setLoading(true);
     setIsGameWon(false);
@@ -54,7 +73,6 @@ function App() {
     const data = await getNewGame(difficulty);
     const newCells = data.task;
     const solution = data.solution;
-    console.log("Запрашиваю сложность:", difficulty);
     setBoard(newCells);
     setSolution(solution);
     setInitialBoard(JSON.parse(JSON.stringify(newCells)));
@@ -66,9 +84,9 @@ function App() {
     setLoading(false);
   };
 
-  // 1. ЭФФЕКТ ЗАГРУЗКИ: Срабатывает ОДИН РАЗ при запуске сайта
+  
   useEffect(() => {
-    // Создаем внутреннюю асинхронную функцию
+    
     const loadGame = async () => {
       const savedBoard = localStorage.getItem("sudoku_board");
       const savedInitial = localStorage.getItem("sudoku_initial");
@@ -79,11 +97,11 @@ function App() {
       const savedNotes = localStorage.getItem("sudoku_notes");
 
       if (savedBoard && savedInitial) {
-        // Парсим данные
+        
         const parsedInitial = JSON.parse(savedInitial);
         const parsedBoard = JSON.parse(savedBoard);
 
-        // Сначала устанавливаем доски
+        
         setBoard(parsedBoard);
         setInitialBoard(parsedInitial);
 
@@ -117,28 +135,28 @@ function App() {
         }
 
         try {
-          // Теперь await разрешен, так как мы внутри async loadGame
+          
           const recoveredSolution = await getSolution(parsedInitial);
           setSolution(recoveredSolution);
         } catch (err) {
           console.error("Не удалось восстановить решение с сервера", err);
-          // Если сервер недоступен, можно вызвать startNewGame() как запасной вариант
+          
         }
 
         setLoading(false);
       } else {
-        // Если сохранения нет — запрашиваем новую игру
+        
         await startNewGame();
       }
     };
 
-    // Вызываем нашу функцию
+    
     loadGame();
-  }, []); // Пустой массив — сработает один раз при монтировании
+  }, []); 
 
-  // 2. ЭФФЕКТ СОХРАНЕНИЯ: Срабатывает при каждом изменении состояния
+  
   useEffect(() => {
-    // Сохраняем только если игра уже загружена
+    
     if (!loading && board.length > 0) {
       localStorage.setItem("sudoku_board", JSON.stringify(board));
       localStorage.setItem("sudoku_initial", JSON.stringify(initialBoard));
@@ -191,6 +209,34 @@ function App() {
     return () => clearInterval(timerId);
   }, [loading, isTimerPaused, isGameOver]);
 
+  useEffect(() => {
+    const pauseTimerOnLeave = () => {
+      if (loadingRef.current || !boardLoadedRef.current) return;
+
+      setIsTimerPaused(true);
+      localStorage.setItem(
+        "sudoku_timer",
+        JSON.stringify({
+          elapsedSeconds: elapsedRef.current,
+          isPaused: true,
+          updatedAt: Date.now(),
+        }),
+      );
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) pauseTimerOnLeave();
+    };
+
+    window.addEventListener("pagehide", pauseTimerOnLeave);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      window.removeEventListener("pagehide", pauseTimerOnLeave);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
+
   const handleCellChange = (row, col, value) => {
     if (isGameOver || isTimerPaused) return;
 
@@ -198,13 +244,13 @@ function App() {
       console.warn("Решение еще загружается...");
       return;
     }
-    // async можно убрать, если нет запросов
-    // Если клетка изначально заполнена (из initialBoard), ничего не делаем
+    
+    
     if (initialBoard[row][col] !== 0) return;
 
     if (board[row][col] === value) return;
 
-    // СОХРАНЯЕМ ТЕКУЩЕЕ СОСТОЯНИЕ В ИСТОРИЮ ПЕРЕД ИЗМЕНЕНИЕМ
+    
     setHistory((prev) =>
       [
         ...prev,
@@ -227,15 +273,15 @@ function App() {
       return;
     }
 
-    // СВЕРЯЕМ С МАССИВОМ РЕШЕНИЯ
-    // Сравниваем введенное значение с тем, что лежит в solution на этом месте
+    
+    
     const isCorrect = value === solution[row][col];
 
     if (!isCorrect) {
       setErrors((prev) => [...new Set([...prev, `${row}-${col}`])]);
       setMistakeCount((prev) => prev + 1);
     } else {
-      // Если совпало — убираем из ошибок
+
       setErrors((prev) => prev.filter((e) => e !== `${row}-${col}`));
     }
   };
@@ -280,16 +326,13 @@ function App() {
   const undoMove = () => {
     if (isGameOver || isTimerPaused || history.length === 0) return;
 
-    // Берем последний элемент из истории
     const lastState = history[history.length - 1];
 
-    // Устанавливаем состояния
     setBoard(lastState.board);
     setErrors(lastState.errors);
     setMistakeCount(lastState.mistakeCount ?? 0);
     setNotes(lastState.notes ?? createEmptyNotes());
 
-    // Удаляем последний элемент из истории
     setHistory((prev) => prev.slice(0, -1));
   };
 
@@ -297,7 +340,10 @@ function App() {
 
   return (
     <div className="container">
-      <Header />
+      <Header
+        onAuthClick={() => setIsAuthOpen(true)}
+        username={username}
+      />
       <DifficultySelector
         currentDifficulty={difficulty}
         setDifficulty={setDifficulty}
@@ -394,6 +440,13 @@ function App() {
           variant="lose"
         />
       )}
+
+      <Modal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)}>
+        <AuthForm
+          onClose={() => setIsAuthOpen(false)}
+          onSuccess={(name) => setUsername(name)}
+        />
+      </Modal>
     </div>
   );
 }

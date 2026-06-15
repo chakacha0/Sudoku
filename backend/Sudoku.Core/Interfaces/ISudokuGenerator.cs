@@ -4,5 +4,5 @@ namespace Sudoku.Core.Interfaces;
 
 public interface ISudokuGenerator
 {
-    Board Generate(int difficulty); // difficulty — сколько цифр оставить
+    Board Generate(int difficulty); 
 }

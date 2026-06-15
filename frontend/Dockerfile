@@ -8,12 +8,9 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-# Этап раздачи статики через Nginx
 FROM nginx:stable-alpine
-# У Vite папка сборки называется dist
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Добавляем конфиг, чтобы React Router (если он есть) не выдавал 404
 RUN echo 'server { \
     listen 80; \
     location / { \
