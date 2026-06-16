@@ -1,13 +1,17 @@
 import axios from "axios";
+import { normalizeUserId } from "../utils/authHelper";
 
-const API_URL = "http://localhost:5000/api/sudoku";   
+const API_URL = "http://localhost:5000/api/sudoku";
 
-export const getNewGame = async (difficultyValue) => {
-  const response = await axios.get(`${API_URL}/new`, {
-    params: {
-      difficult: difficultyValue, 
-    },
-  });
+export const getNewGame = async (difficultyValue, userId) => {
+  const payload = { difficult: difficultyValue };
+  const normalizedUserId = normalizeUserId(userId);
+
+  if (normalizedUserId) {
+    payload.userId = normalizedUserId;
+  }
+
+  const response = await axios.post(`${API_URL}/new`, payload);
   return response.data;
 };
 export const validateMove = async (grid, row, col, value) => {
@@ -21,13 +25,13 @@ export const validateMove = async (grid, row, col, value) => {
     return response.data.isValid;
   } catch (error) {
     console.error("Ошибка при валидации:", error);
-    return true; 
+    return true;
   }
 };
 
 export const getSolution = async (board) => {
   const response = await axios.post(`${API_URL}/get-solution`, {
-    board: board, 
+    board: board,
   });
 
   return response.data;

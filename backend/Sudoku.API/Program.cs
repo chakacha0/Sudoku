@@ -19,8 +19,12 @@ builder.Services.AddScoped<ISudokuValidator, SudokuValidator>();
 builder.Services.AddScoped<ISudokuSolver, SudokuSolver>(); 
 builder.Services.AddDbContext<SudokuDbContext>(options =>
     options.UseNpgsql(connectionString));
-builder.Services.AddScoped<IUserRepository, UserRepository>(); 
+ 
+builder.Services.AddScoped<ISudokuService, SudokuService>();
+builder.Services.AddScoped<ISudokuRepository, SudokuRepository>();
 
+builder.Services.AddScoped<IGameService, GameService>();
+builder.Services.AddScoped<IGameRepository, GameRepository>();
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -28,9 +32,12 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
-builder.Services.AddScoped<IUserService, UserService>();
+
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options => {

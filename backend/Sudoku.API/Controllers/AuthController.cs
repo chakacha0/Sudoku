@@ -44,5 +44,7 @@ public class AuthController : ControllerBase
             return BadRequest(new { Message = ex.Message });
         }
     }
+
+    
    
 }

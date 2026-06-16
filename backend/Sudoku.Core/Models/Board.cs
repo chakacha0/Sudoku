@@ -2,11 +2,13 @@ namespace Sudoku.Core.Models;
 
 public class Board
 {
-    public int[][] Solution { get; set; }   
-    public int[][] Task { get; set; }     
+    public Guid Id {get; set;}
+    public int[][] Solution { get; set; } = null!;  
+    public int[][] Task { get; set; } = null!;     
 
     public Board()
     {
+        Id = Guid.NewGuid(); 
         Solution = new int[9][];
         Task = new int[9][];
         for (int i = 0; i < 9; i++)

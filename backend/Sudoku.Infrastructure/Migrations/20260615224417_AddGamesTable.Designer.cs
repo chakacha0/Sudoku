@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Sudoku.Infrastructure.Persistence;
@@ -11,9 +12,11 @@ using Sudoku.Infrastructure.Persistence;
 namespace Sudoku.Infrastructure.Migrations
 {
     [DbContext(typeof(SudokuDbContext))]
-    partial class SudokuDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260615224417_AddGamesTable")]
+    partial class AddGamesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

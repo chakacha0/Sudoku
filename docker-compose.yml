@@ -1,5 +1,4 @@
 services:
-  # База данных Postgres
   db:
     image: postgres:latest
     container_name: sudoku_db
@@ -13,7 +12,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/
 
-  # Бэкенд на ASP.NET
+  
   backend:
     build: ./backend
     container_name: sudoku_backend
@@ -25,7 +24,6 @@ services:
     ports:
       - "5000:80"
 
-  # Фронтенд на React (Vite)
   frontend:
     build: ./frontend
     container_name: sudoku_frontend

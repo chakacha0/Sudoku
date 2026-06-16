@@ -17,6 +17,7 @@ import {
 import { MAX_MISTAKES } from "./constants/gameConstants";
 
 import "./App.css";
+import { getUserIdFromToken } from "./utils/authHelper";
 
 function App() {
   const [board, setBoard] = useState([]);
@@ -55,7 +56,6 @@ function App() {
     boardLoadedRef.current = board.length > 0;
   }, [loading, board.length]);
 
-  
   const startNewGame = async () => {
     setLoading(true);
     setIsGameWon(false);
@@ -70,23 +70,29 @@ function App() {
     localStorage.removeItem("sudoku_timer");
     localStorage.removeItem("sudoku_notes");
 
-    const data = await getNewGame(difficulty);
-    const newCells = data.task;
-    const solution = data.solution;
-    setBoard(newCells);
-    setSolution(solution);
-    setInitialBoard(JSON.parse(JSON.stringify(newCells)));
-    setErrors([]);
-    setMistakeCount(0);
-    setNotes(createEmptyNotes());
-    setIsNotesMode(false);
-    setSelectedCell(null);
-    setLoading(false);
+    const token = localStorage.getItem("token");
+    const userId = getUserIdFromToken(token);
+
+    try {
+      const data = await getNewGame(difficulty, userId);
+      const newCells = data.task;
+      const solution = data.solution;
+      setBoard(newCells);
+      setSolution(solution);
+      setInitialBoard(JSON.parse(JSON.stringify(newCells)));
+      setErrors([]);
+      setMistakeCount(0);
+      setNotes(createEmptyNotes());
+      setIsNotesMode(false);
+      setSelectedCell(null);
+    } catch (err) {
+      console.error("Не удалось создать новую игру:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  
   useEffect(() => {
-    
     const loadGame = async () => {
       const savedBoard = localStorage.getItem("sudoku_board");
       const savedInitial = localStorage.getItem("sudoku_initial");
@@ -97,11 +103,9 @@ function App() {
       const savedNotes = localStorage.getItem("sudoku_notes");
 
       if (savedBoard && savedInitial) {
-        
         const parsedInitial = JSON.parse(savedInitial);
         const parsedBoard = JSON.parse(savedBoard);
 
-        
         setBoard(parsedBoard);
         setInitialBoard(parsedInitial);
 
@@ -122,8 +126,11 @@ function App() {
         }
 
         if (savedTimer) {
-          const { elapsedSeconds: savedElapsed, isPaused, updatedAt } =
-            JSON.parse(savedTimer);
+          const {
+            elapsedSeconds: savedElapsed,
+            isPaused,
+            updatedAt,
+          } = JSON.parse(savedTimer);
           let restoredElapsed = savedElapsed;
 
           if (!isPaused && updatedAt) {
@@ -135,28 +142,22 @@ function App() {
         }
 
         try {
-          
           const recoveredSolution = await getSolution(parsedInitial);
           setSolution(recoveredSolution);
         } catch (err) {
           console.error("Не удалось восстановить решение с сервера", err);
-          
         }
 
         setLoading(false);
       } else {
-        
         await startNewGame();
       }
     };
 
-    
     loadGame();
-  }, []); 
+  }, []);
 
-  
   useEffect(() => {
-    
     if (!loading && board.length > 0) {
       localStorage.setItem("sudoku_board", JSON.stringify(board));
       localStorage.setItem("sudoku_initial", JSON.stringify(initialBoard));
@@ -244,13 +245,11 @@ function App() {
       console.warn("Решение еще загружается...");
       return;
     }
-    
-    
+
     if (initialBoard[row][col] !== 0) return;
 
     if (board[row][col] === value) return;
 
-    
     setHistory((prev) =>
       [
         ...prev,
@@ -273,15 +272,12 @@ function App() {
       return;
     }
 
-    
-    
     const isCorrect = value === solution[row][col];
 
     if (!isCorrect) {
       setErrors((prev) => [...new Set([...prev, `${row}-${col}`])]);
       setMistakeCount((prev) => prev + 1);
     } else {
-
       setErrors((prev) => prev.filter((e) => e !== `${row}-${col}`));
     }
   };
@@ -340,10 +336,7 @@ function App() {
 
   return (
     <div className="container">
-      <Header
-        onAuthClick={() => setIsAuthOpen(true)}
-        username={username}
-      />
+      <Header onAuthClick={() => setIsAuthOpen(true)} username={username} />
       <DifficultySelector
         currentDifficulty={difficulty}
         setDifficulty={setDifficulty}

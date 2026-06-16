@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Sudoku.Infrastructure.Persistence;
@@ -11,9 +12,11 @@ using Sudoku.Infrastructure.Persistence;
 namespace Sudoku.Infrastructure.Migrations
 {
     [DbContext(typeof(SudokuDbContext))]
-    partial class SudokuDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260615173151_AddBoardsTable")]
+    partial class AddBoardsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,39 +44,6 @@ namespace Sudoku.Infrastructure.Migrations
                     b.ToTable("Boards");
                 });
 
-            modelBuilder.Entity("Sudoku.Core.Models.Game", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("BoardId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<bool>("GameEnd")
-                        .HasColumnType("boolean");
-
-                    b.Property<int>("Score")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Time")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BoardId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Games");
-                });
-
             modelBuilder.Entity("Sudoku.Core.Models.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -99,21 +69,6 @@ namespace Sudoku.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("Sudoku.Core.Models.Game", b =>
-                {
-                    b.HasOne("Sudoku.Core.Models.Board", null)
-                        .WithMany()
-                        .HasForeignKey("BoardId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Sudoku.Core.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

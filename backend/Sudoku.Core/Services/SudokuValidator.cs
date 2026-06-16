@@ -4,12 +4,6 @@ namespace Sudoku.Core.Services;
 
 public class SudokuValidator : ISudokuValidator
 {
-    private readonly ISudokuSolver _solver;
-    public SudokuValidator(ISudokuSolver solver)
-    {        
-        _solver = solver;
-    }
-    
     public bool IsMoveValid(int[][] grid, int row, int col, int value)
     {
         if (value < 1 || value > 9) return false;
@@ -36,9 +30,7 @@ public class SudokuValidator : ISudokuValidator
                 if ((r != row || c != col) && grid[r][c] == value)
                     return false;
             }
-        }
-
-        if (_solver.CountSolutions(grid, limit: 2) == 0) return false; 
+        }        
 
         return true; 
     }
