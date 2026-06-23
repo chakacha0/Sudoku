@@ -6,6 +6,7 @@ const GameStats = ({
   maxMistakes,
   elapsedSeconds,
   isPaused,
+  totalScore,
   onTogglePause,
 }) => {
   const isLimitReached = mistakeCount >= maxMistakes;
@@ -23,6 +24,7 @@ const GameStats = ({
           {isPaused ? "▶" : "⏸"}
         </button>
       </div>
+      <div className="game-stats-score">Очки: {totalScore}</div>
       <div className={`game-stats-mistakes ${isLimitReached ? "limit-reached" : ""}`}>
         Ошибки: {mistakeCount}/{maxMistakes}
       </div>

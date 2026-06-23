@@ -14,18 +14,20 @@ export const getNewGame = async (difficultyValue, userId) => {
   const response = await axios.post(`${API_URL}/new`, payload);
   return response.data;
 };
-export const validateMove = async (grid, row, col, value) => {
+
+export const validateMove = async (userId, row, col, board, time) => {
   try {
     const response = await axios.post(`${API_URL}/check-move`, {
-      grid,
+      userId,
       row,
       col,
-      value,
+      board,
+      time,
     });
-    return response.data.isValid;
+    return response.data;
   } catch (error) {
     console.error("Ошибка при валидации:", error);
-    return true;
+    throw error;
   }
 };
 

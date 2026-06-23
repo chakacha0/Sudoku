@@ -4,10 +4,15 @@ public class Board
 {
     public Guid Id {get; set;}
     public int[][] Solution { get; set; } = null!;  
-    public int[][] Task { get; set; } = null!;     
+    public int[][] Task { get; set; } = null!;  
 
-    public Board()
+    public int Difficulty {get; set;}
+
+    public Board(){}  
+
+    public Board(int difficulty)
     {
+        Difficulty = difficulty;
         Id = Guid.NewGuid(); 
         Solution = new int[9][];
         Task = new int[9][];

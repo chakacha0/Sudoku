@@ -16,7 +16,7 @@ public class SudokuService : ISudokuService
 
     public async Task<Board?> StartNewGameAsync(int difficulty)
     {
-        var board=_generator.Generate(difficulty);
+        var board =_generator.Generate(difficulty);
         await _repository.AddAsync(board);
         return board;
     }

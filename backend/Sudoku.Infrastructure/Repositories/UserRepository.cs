@@ -31,4 +31,17 @@ public class UserRepository : IUserRepository
     {
         return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
     }
+
+    public async Task<User?> GetByNameAsync(string name)
+    {
+        return await _context.Users.FirstOrDefaultAsync(u => u.Username == name);
+    }
+
+
+    public async Task UpdateUserAsync(User user)
+    {
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync();
+    }
+   
 }

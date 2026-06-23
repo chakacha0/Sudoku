@@ -53,6 +53,17 @@
   background-color: #f0f8ff;
 }
 
+.game-stats-score {
+  font-family: "Main", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-dark);
+  text-align: center;
+  padding: 6px 10px;
+  border: 2px solid #e0e8e0;
+  background-color: #fafcfa;
+}
+
 .game-stats-mistakes {
   font-family: "Main", Arial, sans-serif;
   font-size: 16px;

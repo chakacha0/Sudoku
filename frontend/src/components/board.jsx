@@ -12,6 +12,7 @@ const Board = ({
   onNoteToggle,
   onNoteClear,
   errors,
+  activeNumber,
 }) => {
   return (
     <div className="sudoku-grid">
@@ -27,14 +28,16 @@ const Board = ({
               isSelected={
                 selectedCell?.row === rowIndex &&
                 selectedCell?.col === colIndex
-              }
+              }              
               isNotesMode={isNotesMode}
+              activeNumber={activeNumber}
               onChange={(newValue) =>
                 onCellChange(rowIndex, colIndex, newValue)
               }
               onClick={() => onCellClick(rowIndex, colIndex)}
               onNoteToggle={(value) => onNoteToggle(rowIndex, colIndex, value)}
               onNoteClear={() => onNoteClear(rowIndex, colIndex)}
+
             />
           ))}
         </div>

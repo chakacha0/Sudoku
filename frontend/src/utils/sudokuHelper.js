@@ -7,7 +7,7 @@ export const calculateRemainingNumbers = (board, errors = []) => {
     row.forEach((num, colIndex) => {
       if (num !== 0) {
         const cellId = `${rowIndex}-${colIndex}`;
-        
+
         if (!errors.includes(cellId)) {
           counts[num] = (counts[num] || 0) + 1;
         }

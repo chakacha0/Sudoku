@@ -9,19 +9,17 @@ namespace Sudoku.API.Controllers;
 [Route("api/[controller]")]
 public class SudokuController : ControllerBase
 {
-    private readonly ISudokuGenerator _generator;
-    private readonly ISudokuValidator _validator;
     private readonly ISudokuSolver _solver;
     private readonly ISudokuService _sudokuService;
     private readonly IGameService _gameService;
+    private readonly IUserService _userService;
 
-    public SudokuController(ISudokuGenerator generator, ISudokuValidator validator, ISudokuSolver solver, ISudokuService sudokuService, IGameService gameService )
+    public SudokuController(ISudokuSolver solver, ISudokuService sudokuService, IGameService gameService,IUserService userService)
     {
-        _generator = generator;
-        _validator = validator;
         _solver = solver;
         _sudokuService = sudokuService;
         _gameService = gameService;
+        _userService = userService;
     }
 
     [HttpPost("new")]
@@ -43,11 +41,17 @@ public class SudokuController : ControllerBase
     }
 
     [HttpPost("check-move")]
-    public ActionResult<bool> CheckMove([FromBody] MoveRequestDto request)
+    public async Task<ActionResult> CheckMove([FromBody] MoveRequestDto request)
     {
-        var isValid = _validator.IsMoveValid(request.Grid, request.Row, request.Col, request.Value);
-       
-        return Ok(new { isValid });
+        
+        var (score, isCorrect, isGameComplite) = await _gameService.MoveResult(request.UserId, request.Row, request.Col, request.Board, request.Time);
+        if (isGameComplite) await _userService.UpdateScore(request.UserId, score);     
+        return Ok(new 
+        { 
+            score, 
+            isCorrect,
+            isGameComplite 
+        });
     }
 
     [HttpPost("get-solution")]
@@ -57,6 +61,7 @@ public class SudokuController : ControllerBase
         var solution = _solver.GetSolution(request.Board);
         
         return Ok(solution);
-    }
+    }    
+    
 }
 

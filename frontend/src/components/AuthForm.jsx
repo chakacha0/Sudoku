@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { register, login } from "../api/authApi";
-import { getErrorMessage, getUsernameFromToken } from "../utils/authHelper";
+import {
+  getErrorMessage,
+  saveAuthSession,
+} from "../utils/authHelper";
 import "../Styles/AuthModal.css";
 
 const TABS = {
@@ -45,14 +48,10 @@ const AuthForm = ({ onClose, onSuccess }) => {
 
     try {
       const data = await login(email.trim(), password);
-      const name =
-        getUsernameFromToken(data.token) || email.trim().split("@")[0];
-
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("username", name);
-      finishAuth(name);
+      const name = saveAuthSession(data);
+      finishAuth(name || email.trim().split("@")[0]);
     } catch (err) {
-      setError(getErrorMessage(err, "Не удалось войти"));
+      setError(getErrorMessage(err, "Ошибка входа"));
     } finally {
       setIsLoading(false);
     }
@@ -76,11 +75,8 @@ const AuthForm = ({ onClose, onSuccess }) => {
 
     try {
       const data = await register(username.trim(), email.trim(), password);
-      const name = username.trim();
-
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("username", name);
-      finishAuth(name);
+      const name = saveAuthSession(data, username.trim());
+      finishAuth(name || username.trim());
     } catch (err) {
       setError(getErrorMessage(err, "Не удалось зарегистрироваться"));
     } finally {
@@ -148,7 +144,11 @@ const AuthForm = ({ onClose, onSuccess }) => {
 
           {error && <p className="auth-error">{error}</p>}
 
-          <button type="submit" className="auth-submit-btn" disabled={isLoading}>
+          <button
+            type="submit"
+            className="auth-submit-btn"
+            disabled={isLoading}
+          >
             {isLoading ? "Вход..." : "Войти"}
           </button>
         </form>
@@ -194,7 +194,11 @@ const AuthForm = ({ onClose, onSuccess }) => {
 
           {error && <p className="auth-error">{error}</p>}
 
-          <button type="submit" className="auth-submit-btn" disabled={isLoading}>
+          <button
+            type="submit"
+            className="auth-submit-btn"
+            disabled={isLoading}
+          >
             {isLoading ? "Регистрация..." : "Зарегистрироваться"}
           </button>
         </form>

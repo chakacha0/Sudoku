@@ -18,7 +18,7 @@ public class SudokuGenerator : ISudokuGenerator
 
     public Board Generate(int difficulty)
     {
-        var board = new Board();       
+        var board = new Board(difficulty);       
         
         FillBoard(board.Solution);
 
@@ -105,12 +105,11 @@ public class SudokuGenerator : ISudokuGenerator
 
     return level switch
     {
-        1 => _random.Next(20, 31), 
-        2 => _random.Next(31, 41), 
-        3 => _random.Next(41, 51), 
-        4 => _random.Next(51, 56), 
-        5 => _random.Next(56, 61), 
-        6 => _random.Next(61, 64), 
+        1 => _random.Next(20, 33), 
+        2 => _random.Next(34, 46), 
+        3 => _random.Next(47, 54), 
+        4 => _random.Next(55, 60), 
+        5 => _random.Next(61, 64), 
         _ => 30 
     };
     }

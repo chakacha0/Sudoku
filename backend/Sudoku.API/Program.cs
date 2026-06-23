@@ -1,6 +1,5 @@
 using Sudoku.Core.Interfaces;
 using Sudoku.Core.Services;
-using Sudoku.Core.Models;
 using Microsoft.EntityFrameworkCore; 
 using Microsoft.AspNetCore.Authentication.JwtBearer; 
 using Microsoft.IdentityModel.Tokens;
@@ -16,6 +15,8 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddControllers();
 builder.Services.AddScoped<ISudokuGenerator, SudokuGenerator>();
 builder.Services.AddScoped<ISudokuValidator, SudokuValidator>();
+builder.Services.AddScoped<ICalculateScoreService, CalculateScoreService>();
+builder.Services.AddScoped<ILevelService, LevelService>();
 builder.Services.AddScoped<ISudokuSolver, SudokuSolver>(); 
 builder.Services.AddDbContext<SudokuDbContext>(options =>
     options.UseNpgsql(connectionString));
@@ -34,6 +35,12 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+builder.Services.AddScoped<IStatisticsService, StatisticsService>();
+builder.Services.AddScoped<IStatisticsRepository, StatisticsRepository>();
+
+builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
+builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();

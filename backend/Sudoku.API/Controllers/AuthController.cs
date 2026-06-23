@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Sudoku.Core.Interfaces;
 using Sudoku.API.DTOs;
 
+
 namespace Sudoku.API.Controllers;
 
 [ApiController]
@@ -10,10 +11,12 @@ namespace Sudoku.API.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly IUserService _userService;
+    private readonly IRefreshTokenService _tokenService;
 
-    public AuthController(IUserService userService)
+    public AuthController(IUserService userService, IRefreshTokenService tokenService)
     {
         _userService = userService;
+        _tokenService = tokenService;
     }
 
     [HttpPost("register")]
@@ -21,8 +24,13 @@ public class AuthController : ControllerBase
     {
         try
         {
-            var token = await _userService.RegisterAsync(request.Username, request.Email, request.Password);
-            return Ok(new { Token = token });
+            var user = await _userService.RegisterAsync(request.Username, request.Email, request.Password);
+            var tokens = await _tokenService.IssueTokensAsync(user);
+            return Ok(new AuthResponseDto
+            {
+                Token = tokens.Token,
+                RefreshToken = tokens.RefreshToken,
+            });
         }
         catch (Exception ex)
         {
@@ -36,8 +44,13 @@ public class AuthController : ControllerBase
     {
         try
         {
-            var token = await _userService.LoginAsync(request.Email, request.Password);
-            return Ok(new { Token = token });
+            var user = await _userService.LoginAsync(request.Email, request.Password);
+            var tokens = await _tokenService.IssueTokensAsync(user);
+            return Ok(new AuthResponseDto
+            {
+                Token = tokens.Token,
+                RefreshToken = tokens.RefreshToken,
+            });
         }
         catch (Exception ex)
         {
@@ -45,6 +58,17 @@ public class AuthController : ControllerBase
         }
     }
 
-    
-   
+    [HttpPost("refresh")]
+    public async Task<ActionResult> Refresh([FromBody] RefreshRequest request)
+    {
+       try
+        {
+            var result = await _tokenService.RefreshTokenAsync(request.RefreshToken);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return Unauthorized(new { Message = ex.Message });
+        }
+    }  
 }

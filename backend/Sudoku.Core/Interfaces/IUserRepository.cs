@@ -8,4 +8,7 @@ public interface IUserRepository
 
     Task<User?> GetByIdAsync(Guid id);
     Task AddAsync(User user);
+    Task UpdateUserAsync(User user);
+    Task<User?> GetByNameAsync(string name);
+    
 }

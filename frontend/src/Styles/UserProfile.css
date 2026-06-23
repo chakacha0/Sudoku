@@ -1,0 +1,229 @@
+@import "./Variables.css";
+
+.user-profile-panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 320px;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+  padding: 16px;
+  background: var(--bg-white);
+  border: var(--panel-border);
+  box-shadow: var(--panel-shadow);
+  z-index: 10;
+  font-family: "Main", Arial, sans-serif;
+}
+
+.user-profile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.user-profile-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-dark);
+}
+
+.user-profile-close {
+  width: 28px;
+  height: 28px;
+  border: 2px solid #e0e8e0;
+  background: var(--bg-white);
+  color: #555;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-profile-close:hover {
+  border-color: var(--color-main);
+  color: var(--color-main);
+  background: #f4fff3;
+}
+
+.user-profile-message,
+.user-profile-error {
+  margin: 0;
+  font-size: 14px;
+  text-align: center;
+}
+
+.user-profile-error {
+  color: #c0392b;
+  padding: 8px;
+  border: 2px solid #f5b7b1;
+  background: #fff5f5;
+}
+
+.user-profile-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.user-profile-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 10px;
+  border: 2px solid #e0e8e0;
+  background: #fafcfa;
+}
+
+.user-profile-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #5a7a5e;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.user-profile-value {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-dark);
+  word-break: break-word;
+}
+
+.user-profile-level {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 2px solid #e0e8e0;
+  background: #fafcfa;
+}
+
+.user-profile-level-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.user-profile-level-xp {
+  font-size: 13px;
+  font-weight: 600;
+  color: #2d5a31;
+}
+
+.user-profile-level-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-profile-level-value {
+  flex-shrink: 0;
+  min-width: 28px;
+  font-family: "Main";
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-main);
+  line-height: 1;
+}
+
+.user-profile-level-bar {
+  flex: 1;
+  height: 12px;
+  background: #e8f0e8;
+  border: 1px solid #d0e0d0;
+  overflow: hidden;
+}
+
+.user-profile-level-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #39a844, #2ecc71);
+  transition: width 0.3s ease;
+}
+
+.user-profile-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 2px solid #e0e8e0;
+  background: #fafcfa;
+}
+
+.user-profile-stats-table {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.user-profile-stats-head,
+.user-profile-stats-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  align-items: center;
+}
+
+.user-profile-stats-head {
+  padding: 0 6px 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #5a7a5e;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  border-bottom: 1px solid #dce8dc;
+}
+
+.user-profile-stats-head-diff {
+  min-width: 0;
+}
+
+.user-profile-stats-row {
+  padding: 6px;
+  border: 1px solid #dce8dc;
+  background: var(--bg-white);
+}
+
+.user-profile-stat-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-dark);
+}
+
+.user-profile-stat-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #2d5a31;
+  text-align: center;
+}
+
+.user-profile-logout {
+  margin-top: 12px;
+  width: 100%;
+  padding: 10px 16px;
+  border: 2px solid #e0e8e0;
+  background: var(--bg-white);
+  color: #c0392b;
+  font-family: "Main", Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.user-profile-logout:hover {
+  background: #fff5f5;
+  border-color: #f5b7b1;
+}
+
+@media (max-width: 600px) {
+  .user-profile-panel {
+    width: min(280px, calc(100vw - 40px));
+  }
+}

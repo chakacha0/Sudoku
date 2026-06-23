@@ -35,15 +35,13 @@ public class SudokuValidator : ISudokuValidator
         return true; 
     }
 
-    public bool IsBoardCompleted(int[][] grid)
+    public bool IsBoardCompleted(int[][] solution, int[][] currentBoard)
     {
         for (int r = 0; r < 9; r++)
         {
             for (int c = 0; c < 9; c++)
             {
-                int val = grid[r][c];
-                
-                if (val == 0 || !IsMoveValid(grid, r, c, val))
+                if (solution[r][c] != currentBoard[r][c])
                 {
                     return false;
                 }

@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
+using System.Security.Cryptography;
 using Microsoft.IdentityModel.Tokens;
 using Sudoku.Core.Interfaces;
 using Sudoku.Core.Models;
@@ -38,5 +39,13 @@ public class JwtProvider : IJwtProvider
         );
 
         return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    public string GenerateRefreshToken()
+    {
+        var randomNumber = new byte[32];
+        using var rng = RandomNumberGenerator.Create();
+        rng.GetBytes(randomNumber);
+        return Convert.ToBase64String(randomNumber);
     }
 }
