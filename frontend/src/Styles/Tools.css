@@ -3,7 +3,7 @@
 .side-panel .tools-row {
   flex-shrink: 0;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 8px;
   width: 100%;
 }
@@ -65,4 +65,30 @@
   border-color: #d1d8d1;
   box-shadow: none;
   filter: grayscale(1);
+}
+
+.side-panel .tools-row .btn--hint {
+  position: relative;
+}
+
+.side-panel .tools-row .btn--hint .hint-count {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 3px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 16px;
+  text-align: center;
+  color: var(--color-dark);
+  background: var(--color-soft-bg);
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+.side-panel .tools-row .btn--hint.active .hint-count {
+  color: var(--color-main);
+  background: var(--bg-white);
 }

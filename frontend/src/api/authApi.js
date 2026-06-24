@@ -1,8 +1,7 @@
 import api from "./apiClient";
 
 export const login = async (email, password) => {
-  const response = await api.post("/auth/login", { email, password });
-  // Важно: твой бэкенд должен возвращать объект с двумя полями
+  const response = await api.post("/auth/login", { email, password }); 
   return response.data;
 };
 

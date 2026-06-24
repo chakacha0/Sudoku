@@ -12,11 +12,13 @@ const GameScreen = ({
   initialBoard,
   notes,
   isNotesMode,
+  isHintMode,
   selectedCell,
   errors,
   activeNumber,
   isTimerPaused,
   mistakeCount,
+  hintCount,
   elapsedSeconds,
   totalScore,
   history,
@@ -25,6 +27,7 @@ const GameScreen = ({
   setActiveNumber,
   setIsNotesMode,
   setIsTimerPaused,
+  toggleHintMode,
   startNewGame,
   handleCellChange,
   handleCellClick,
@@ -90,7 +93,7 @@ const GameScreen = ({
           <button
             type="button"
             className={`btn ${isNotesMode ? "active" : ""}`}
-            onClick={() => setIsNotesMode((prev) => !prev)}
+            onClick={setIsNotesMode}
             title="Режим заметок"
           >
             <img className="pen" src="/pen.svg" alt="pen" />
@@ -101,6 +104,17 @@ const GameScreen = ({
             disabled={history.length === 0}
           >
             <img className="strelka" src="/strelka.svg" alt="strelka" />
+          </button>
+
+          <button
+            type="button"
+            className={`btn btn--hint ${isHintMode ? "active" : ""}`}
+            onClick={toggleHintMode}
+            disabled={hintCount === 0}
+            title="Подсказка"
+          >
+            <img className="pen" src="/hint.svg" alt="hint" />
+            <span className="hint-count">{hintCount}</span>
           </button>
         </div>
 

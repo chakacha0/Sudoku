@@ -81,7 +81,7 @@
 }
 
 .leaderboard-rank {
-  font-family: "Font2", Arial, sans-serif;
+  font-family: "Main", Arial, sans-serif;
   font-weight: 700;
   color: var(--color-main);
   width: 80px;

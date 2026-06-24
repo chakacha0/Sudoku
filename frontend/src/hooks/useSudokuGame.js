@@ -28,6 +28,8 @@ export const useSudokuGame = (difficulty) => {
   const [selectedCell, setSelectedCell] = useState(null);
   const [notes, setNotes] = useState(() => createEmptyNotes());
   const [isNotesMode, setIsNotesMode] = useState(false);
+  const [isHintMode, setIsHintMode] = useState(false);
+  const [hintCount, setHintCount] = useState(0);
   const [history, setHistory] = useState([]);
   const [isGameWon, setIsGameWon] = useState(false);
   const [isGameLost, setIsGameLost] = useState(false);
@@ -58,6 +60,7 @@ export const useSudokuGame = (difficulty) => {
     setHistory([]);
     setErrors([]);
     setMistakeCount(0);
+    setHintCount(2);
     setNotes(createEmptyNotes());
     setTotalScore(0);
     clearSavedGame();
@@ -71,6 +74,7 @@ export const useSudokuGame = (difficulty) => {
       setSolution(data.solution);
       setInitialBoard(JSON.parse(JSON.stringify(data.task)));
       setIsNotesMode(false);
+      setIsHintMode(false);
       setSelectedCell(null);
     } catch (err) {
       console.error("Не удалось создать новую игру:", err);
@@ -88,6 +92,7 @@ export const useSudokuGame = (difficulty) => {
         setInitialBoard(saved.initialBoard);
         setErrors(saved.errors);
         setMistakeCount(saved.mistakeCount);
+        setHintCount(saved.hintCount);
         setIsGameLost(saved.mistakeCount >= MAX_MISTAKES);
         setHistory(saved.history);
         setNotes(saved.notes ?? createEmptyNotes());
@@ -121,6 +126,7 @@ export const useSudokuGame = (difficulty) => {
         initialBoard,
         errors,
         mistakeCount,
+        hintCount,
         totalScore,
         history,
         notes,
@@ -133,6 +139,7 @@ export const useSudokuGame = (difficulty) => {
     initialBoard,
     errors,
     mistakeCount,
+    hintCount,
     totalScore,
     elapsedSeconds,
     isTimerPaused,
@@ -154,6 +161,10 @@ export const useSudokuGame = (difficulty) => {
   useEffect(() => {
     setIsGameLost(mistakeCount >= MAX_MISTAKES);
   }, [mistakeCount]);
+
+  useEffect(() => {
+    if (hintCount <= 0) setIsHintMode(false);
+  }, [hintCount]);
 
   useEffect(() => {
     if (loading || isTimerPaused || isGameOver) return;
@@ -264,6 +275,52 @@ export const useSudokuGame = (difficulty) => {
     setNotes((prev) => clearNotesInCell(prev, row, col));
   };
 
+  const getHint = (row, col) => {
+    if (isGameOver || isTimerPaused) return;
+    if (!solution || solution.length === 0) return;
+    if (initialBoard[row][col] !== 0 || board[row][col] !== 0) return;
+    if (hintCount <= 0) return;
+
+    const correctValue = solution[row][col];
+
+    setHistory((prev) =>
+      [
+        ...prev,
+        {
+          board: JSON.parse(JSON.stringify(board)),
+          errors: [...errors],
+          mistakeCount,
+          totalScore,
+          notes: JSON.parse(JSON.stringify(notes)),
+          hintCount,
+        },
+      ].slice(-50),
+    );
+
+    const newBoard = board.map((r) => [...r]);
+    newBoard[row][col] = correctValue;
+    setBoard(newBoard);
+    setNotes((prev) => applyPlacedNumberToNotes(prev, row, col, correctValue));
+    setErrors((prev) => prev.filter((e) => e !== `${row}-${col}`));
+    setHintCount((prev) => prev - 1);
+    setIsHintMode(false);
+  };
+
+  const toggleNotesMode = useCallback(() => {
+    setIsNotesMode((prev) => {
+      if (!prev) setIsHintMode(false);
+      return !prev;
+    });
+  }, []);
+
+  const toggleHintMode = useCallback(() => {
+    if (hintCount <= 0) return;
+    setIsHintMode((prev) => {
+      if (!prev) setIsNotesMode(false);
+      return !prev;
+    });
+  }, [hintCount]);
+
   const handleCellClick = (row, col) => {
     setSelectedCell({ row, col });
 
@@ -275,6 +332,11 @@ export const useSudokuGame = (difficulty) => {
       } else if (activeNumber >= 1 && activeNumber <= 9) {
         handleNoteToggle(row, col, activeNumber);
       }
+      return;
+    }
+
+    if (isHintMode) {
+      getHint(row, col);
       return;
     }
 
@@ -292,6 +354,10 @@ export const useSudokuGame = (difficulty) => {
     setErrors(lastState.errors);
     setNotes(lastState.notes ?? createEmptyNotes());
     setHistory((prev) => prev.slice(0, -1));
+
+    if (lastState.hintCount !== undefined) {
+      setHintCount(lastState.hintCount);
+    }
   };
 
   const resetScore = () => setTotalScore(0);
@@ -301,19 +367,22 @@ export const useSudokuGame = (difficulty) => {
     initialBoard,
     notes,
     isNotesMode,
+    isHintMode,
     selectedCell,
     errors,
     activeNumber,
     isTimerPaused,
     mistakeCount,
+    hintCount,
     elapsedSeconds,
     totalScore,
     history,
     isGameWon,
     isGameLost,
     setActiveNumber,
-    setIsNotesMode,
+    setIsNotesMode: toggleNotesMode,
     setIsTimerPaused,
+    toggleHintMode,
     startNewGame,
     handleCellChange,
     handleCellClick,

@@ -7,6 +7,7 @@ export const GAME_STORAGE_KEYS = {
   timer: "sudoku_timer",
   notes: "sudoku_notes",
   totalScore: "total_score",
+  hints: "sudoku_hints",
 };
 
 export const clearSavedGame = () => {
@@ -20,6 +21,7 @@ export const saveGameToStorage = ({
   initialBoard,
   errors,
   mistakeCount,
+  hintCount,
   totalScore,
   history,
   notes,
@@ -30,6 +32,7 @@ export const saveGameToStorage = ({
   localStorage.setItem(GAME_STORAGE_KEYS.initial, JSON.stringify(initialBoard));
   localStorage.setItem(GAME_STORAGE_KEYS.errors, JSON.stringify(errors));
   localStorage.setItem(GAME_STORAGE_KEYS.mistakes, JSON.stringify(mistakeCount));
+  localStorage.setItem(GAME_STORAGE_KEYS.hints, JSON.stringify(hintCount));
   localStorage.setItem(GAME_STORAGE_KEYS.totalScore, JSON.stringify(totalScore));
   localStorage.setItem(GAME_STORAGE_KEYS.history, JSON.stringify(history));
   localStorage.setItem(GAME_STORAGE_KEYS.notes, JSON.stringify(notes));
@@ -74,6 +77,9 @@ export const loadSavedGame = () => {
     errors: JSON.parse(localStorage.getItem(GAME_STORAGE_KEYS.errors) || "[]"),
     mistakeCount: JSON.parse(
       localStorage.getItem(GAME_STORAGE_KEYS.mistakes) || "0",
+    ),
+    hintCount: JSON.parse(
+      localStorage.getItem(GAME_STORAGE_KEYS.hints) || "2",
     ),
     history: JSON.parse(localStorage.getItem(GAME_STORAGE_KEYS.history) || "[]"),
     notes: JSON.parse(localStorage.getItem(GAME_STORAGE_KEYS.notes) || "null"),
