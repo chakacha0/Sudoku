@@ -7,6 +7,7 @@ using Sudoku.Infrastructure.Authentication;
 using Sudoku.Infrastructure.Persistence;
 using Sudoku.Infrastructure.Repositories;
 using System.Text;
+using Sudoku.API.Hubs;
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -45,6 +46,10 @@ builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 
+builder.Services.AddSingleton<IRoomManager, RoomManager>();
+
+builder.Services.AddSignalR();
+
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options => {
@@ -65,7 +70,11 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddCors(options => {
     options.AddPolicy("AllowReactApp", policy => {
-        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+        policy
+            .WithOrigins("http://localhost:3000", "http://localhost:5173")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
     });
 });
 
@@ -102,5 +111,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<SudokuHub>("/gamehub");
 
 app.Run();

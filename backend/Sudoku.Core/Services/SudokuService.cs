@@ -14,9 +14,18 @@ public class SudokuService : ISudokuService
         _repository=repository;
     }
 
-    public async Task<Board?> StartNewGameAsync(int difficulty)
+    public async Task<Board?> StartNewGameAsync(int difficulty, Guid? userId = null)
     {
-        var board =_generator.Generate(difficulty);
+        if (userId.HasValue && userId.Value != Guid.Empty)
+        {
+            var unplayedBoard = await _repository.GetUnplayedBoardAsync(userId.Value, difficulty);
+            if (unplayedBoard != null)
+            {
+                return unplayedBoard;
+            }
+        }
+
+        var board = _generator.Generate(difficulty);
         await _repository.AddAsync(board);
         return board;
     }

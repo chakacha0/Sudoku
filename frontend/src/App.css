@@ -19,7 +19,7 @@
   justify-content: center;
   align-items: flex-start;
   gap: 30px;
-  margin-top: 20px;
+  margin-top: 0px;
 }
 
 /*  ==========================================================================
@@ -89,4 +89,26 @@
   color: #666;
   font-size: 0.95rem;
   margin: 12px 0 20px;
+}
+
+.auth-required {
+  margin-top: 60px;
+  max-width: 420px;
+  padding: 32px;
+  text-align: center;
+  background: var(--color-light, #fff);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.auth-required h2 {
+  margin: 0 0 12px;
+  font-family: "Main", Arial, sans-serif;
+  color: var(--color-dark);
+}
+
+.auth-required p {
+  margin: 0 0 24px;
+  color: #666;
+  line-height: 1.5;
 }

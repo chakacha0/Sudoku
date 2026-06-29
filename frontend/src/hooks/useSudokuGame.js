@@ -8,7 +8,7 @@ import {
   applyPlacedNumberToNotes,
 } from "../utils/notesUtils";
 import { MAX_MISTAKES } from "../constants/gameConstants";
-import { getAccessToken, getUserIdFromToken } from "../utils/authHelper";
+import { isAuthenticated } from "../utils/authHelper";
 import {
   clearSavedGame,
   loadSavedGame,
@@ -16,7 +16,7 @@ import {
   savePausedTimer,
 } from "../utils/gameStorage";
 
-export const useSudokuGame = (difficulty) => {
+export const useSudokuGame = (difficulty, enabled = true) => {
   const [board, setBoard] = useState([]);
   const [solution, setSolution] = useState([]);
   const [initialBoard, setInitialBoard] = useState([]);
@@ -52,6 +52,8 @@ export const useSudokuGame = (difficulty) => {
   }, [loading, board.length]);
 
   const startNewGame = useCallback(async () => {
+    if (!enabled || !isAuthenticated()) return;
+
     setLoading(true);
     setIsGameWon(false);
     setIsGameLost(false);
@@ -65,11 +67,8 @@ export const useSudokuGame = (difficulty) => {
     setTotalScore(0);
     clearSavedGame();
 
-    const token = getAccessToken();
-    const userId = getUserIdFromToken(token);
-
     try {
-      const data = await getNewGame(difficulty, userId);
+      const data = await getNewGame(difficulty);
       setBoard(data.task);
       setSolution(data.solution);
       setInitialBoard(JSON.parse(JSON.stringify(data.task)));
@@ -81,9 +80,16 @@ export const useSudokuGame = (difficulty) => {
     } finally {
       setLoading(false);
     }
-  }, [difficulty]);
+  }, [difficulty, enabled]);
 
   useEffect(() => {
+    if (!enabled) {
+      setLoading(false);
+      setBoard([]);
+      setInitialBoard([]);
+      return;
+    }
+
     const loadGame = async () => {
       const saved = loadSavedGame();
 
@@ -117,7 +123,7 @@ export const useSudokuGame = (difficulty) => {
     };
 
     loadGame();
-  }, [startNewGame]);
+  }, [startNewGame, enabled]);
 
   useEffect(() => {
     if (!loading && board.length > 0) {
@@ -226,25 +232,15 @@ export const useSudokuGame = (difficulty) => {
       return;
     }
 
-    const token = getAccessToken();
-    const userId = getUserIdFromToken(token);
     let nextScore = totalScore;
     let isCorrect = value === solution[row][col];
 
-    if (userId) {
-      try {
-        const result = await validateMove(
-          userId,
-          row,
-          col,
-          newBoard,
-          elapsedSeconds,
-        );
-        nextScore = result.score ?? totalScore;
-        isCorrect = result.isCorrect ?? isCorrect;
-      } catch (error) {
-        console.error("Ошибка при проверке хода:", error);
-      }
+    try {
+      const result = await validateMove(row, col, newBoard, elapsedSeconds);
+      nextScore = result.score ?? totalScore;
+      isCorrect = result.isCorrect ?? isCorrect;
+    } catch (error) {
+      console.error("Ошибка при проверке хода:", error);
     }
 
     setTotalScore(nextScore);

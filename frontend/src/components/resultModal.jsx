@@ -10,6 +10,7 @@ const ResultModal = ({
   onButtonClick,
   variant = "win",
   score = 0,
+  showScore = true,
 }) => {
   useEffect(() => {
     document.body.classList.add("modal-open");
@@ -24,7 +25,7 @@ const ResultModal = ({
       <div className={`win-modal win-modal--${variant}`}>
         <h2>{title}</h2>
         <p>{message}</p>
-        {score !== undefined && (
+        {showScore && score !== undefined && (
           <p className="win-modal-score">Очки: {score}</p>
         )}
         {errorCount !== undefined && (

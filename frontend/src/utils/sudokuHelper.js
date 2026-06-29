@@ -21,3 +21,48 @@ export const calculateRemainingNumbers = (board, errors = []) => {
   }
   return remaining;
 };
+
+export const countEmptyCells = (board) => {
+  if (!board?.length) return 0;
+
+  return board.reduce(
+    (total, row) => total + row.filter((cell) => cell === 0).length,
+    0,
+  );
+};
+
+export const countPlayerFilledCells = (board, initialBoard) => {
+  if (!board?.length || !initialBoard?.length) return 0;
+
+  let filled = 0;
+
+  for (let row = 0; row < 9; row += 1) {
+    for (let col = 0; col < 9; col += 1) {
+      if (initialBoard[row][col] === 0 && board[row][col] !== 0) {
+        filled += 1;
+      }
+    }
+  }
+
+  return filled;
+};
+
+export const countCorrectFilledCells = (board, initialBoard, solution) => {
+  if (!board?.length || !initialBoard?.length || !solution?.length) return 0;
+
+  let filled = 0;
+
+  for (let row = 0; row < 9; row += 1) {
+    for (let col = 0; col < 9; col += 1) {
+      if (
+        initialBoard[row][col] === 0 &&
+        board[row][col] !== 0 &&
+        board[row][col] === solution[row][col]
+      ) {
+        filled += 1;
+      }
+    }
+  }
+
+  return filled;
+};

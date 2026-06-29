@@ -5,14 +5,15 @@ import "../Styles/NumberSelector.css";
 function NumberSelector({
   activeNumber,
   setActiveNumber,
-  remainingNumbers = {},
+  remainingNumbers,
 }) {
   const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  const counts = remainingNumbers ?? {};
 
   return (
     <div className="number-selector">
       {numbers.map((num) => {
-        const count = remainingNumbers[num];
+        const count = counts[num];
         const isCompleted = count === 0;
 
         return (

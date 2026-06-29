@@ -1,40 +1,24 @@
 import axios from "axios";
-import { normalizeUserId } from "../utils/authHelper";
+import api from "./apiClient";
 
 const API_URL = "http://localhost:5000/api/sudoku";
 
-export const getNewGame = async (difficultyValue, userId) => {
-  const payload = { difficult: difficultyValue };
-  const normalizedUserId = normalizeUserId(userId);
-
-  if (normalizedUserId) {
-    payload.userId = normalizedUserId;
-  }
-
-  const response = await axios.post(`${API_URL}/new`, payload);
+export const getNewGame = async (difficultyValue) => {
+  const response = await api.post("/sudoku/new", { difficult: difficultyValue });
   return response.data;
 };
 
-export const validateMove = async (userId, row, col, board, time) => {
-  try {
-    const response = await axios.post(`${API_URL}/check-move`, {
-      userId,
-      row,
-      col,
-      board,
-      time,
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Ошибка при валидации:", error);
-    throw error;
-  }
+export const validateMove = async (row, col, board, time) => {
+  const response = await api.post("/sudoku/check-move", {
+    row,
+    col,
+    board,
+    time,
+  });
+  return response.data;
 };
 
 export const getSolution = async (board) => {
-  const response = await axios.post(`${API_URL}/get-solution`, {
-    board: board,
-  });
-
+  const response = await axios.post(`${API_URL}/get-solution`, { board });
   return response.data;
 };

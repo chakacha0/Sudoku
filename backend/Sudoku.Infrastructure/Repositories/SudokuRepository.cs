@@ -18,6 +18,15 @@ public class SudokuRepository : ISudokuRepository
         return await _context.Boards
                 .FirstOrDefaultAsync(u => u.Id == id);
     }
+
+    public async Task<Board?> GetUnplayedBoardAsync(Guid userId, int difficulty)
+    {
+        return await _context.Boards
+            .Where(b => b.Difficulty == difficulty)
+            .Where(b => !_context.Games.Any(g => g.UserId == userId && g.BoardId == b.Id))
+            .OrderBy(b => b.Id)
+            .FirstOrDefaultAsync();
+    }
     
     public async Task AddAsync(Board board)
     {

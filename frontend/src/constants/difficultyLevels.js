@@ -5,3 +5,6 @@ export const DIFFICULTY_LEVELS = [
   { label: "Expert", value: 4 },
   { label: "Extream", value: 5 },
 ];
+
+export const getDifficultyLabel = (value) =>
+  DIFFICULTY_LEVELS.find((level) => level.value === value)?.label ?? "Medium";

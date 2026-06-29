@@ -12,9 +12,10 @@ const Header = ({
   onLogout,
   onTitleClick,
   onLeaderboardClick,
+  onSignalRClick,
 }) => {
   const userAreaRef = useRef(null);
-  const isLeaderboard = currentView === "leaderboard";
+  const isGameView = currentView === "game";
 
   useEffect(() => {
     if (!isProfileOpen) return;
@@ -45,14 +46,23 @@ const Header = ({
 
   return (
     <header className="main-header">
-      {!isLeaderboard && (
-        <button
-          type="button"
-          className="header-leaderboard-btn"
-          onClick={onLeaderboardClick}
-        >
-          Рейтинг
-        </button>
+      {isGameView && (
+        <div className="header-nav">
+          <button
+            type="button"
+            className="header-nav-btn"
+            onClick={onLeaderboardClick}
+          >
+            Рейтинг
+          </button>
+          <button
+            type="button"
+            className="header-nav-btn"
+            onClick={onSignalRClick}
+          >
+            Играть с друзьями
+          </button>
+        </div>
       )}
 
       <div className="header-center">
@@ -60,9 +70,9 @@ const Header = ({
         <div className="header-content">
           <button
             type="button"
-            className={`header-title-btn ${isLeaderboard ? "header-title-btn--back" : ""}`}
+            className={`header-title-btn ${!isGameView ? "header-title-btn--back" : ""}`}
             onClick={onTitleClick}
-            title={isLeaderboard ? "Вернуться к игре" : "Sudoku"}
+            title={!isGameView ? "Вернуться к игре" : "Sudoku"}
           >
             <h1 className="header-title">Sudoku</h1>
           </button>

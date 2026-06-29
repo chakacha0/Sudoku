@@ -104,8 +104,11 @@ export const useAuth = () => {
     setIsAuthOpen(false);
   };
 
+  const isLoggedIn = Boolean(username) && isAuthenticated();
+
   return {
     username,
+    isLoggedIn,
     isAuthOpen,
     isProfileOpen,
     setIsAuthOpen,
